@@ -33,9 +33,22 @@ public class BookService {
         return bookMapper.toDetailResponse(bookRepository.findById(id).orElseThrow());
     }
 
-    public BookCreatedResponse create(BookInsertRequest request) {
+    public BookCreatedRequest create(BookInsertRequest request) {
         return bookMapper.toCreatedResponse(bookRepository.save(bookMapper.toEntity(request)));
     }
+
+    public List<BookCreatedRequestList> createList(List<BookInsertRequestList> requests) {
+        List<Book> books = requests.stream()
+                .map(bookMapper::toEntity)
+                .toList();
+
+        List<Book> savedBooks = bookRepository.saveAll(books);
+
+        return savedBooks.stream()
+                .map(bookMapper::toCreatedListResponse)
+                .toList();
+    }
+
 
     public BookDetailResponse update(Long id,
                                      BookUpdateRequest request

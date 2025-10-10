@@ -9,8 +9,10 @@ import org.mapstruct.MappingTarget;
 public interface BookMapper {
 
     Book toEntity(BookInsertRequest request);
+    Book toEntity(BookInsertRequestList request);
     BookDetailResponse toDetailResponse(Book book);
     BookListResponse toListResponse(Book book);
-    BookCreatedResponse toCreatedResponse(Book book);
+    BookCreatedRequest toCreatedResponse(Book book);
+    BookCreatedRequestList toCreatedListResponse(Book book);
     void updateEntity(BookUpdateRequest request, @MappingTarget Book book);
 }
