@@ -26,18 +26,18 @@ public class BookController {
     }
 
     @PostMapping
-    public BookCreatedRequest create(@RequestBody BookInsertRequest request) {
+    public BookCreatedResponse create(@RequestBody BookInsertRequest request) {
         return bookService.create(request);
     }
 
     @PostMapping("/all")
-    public List<BookCreatedRequestList> createBatch(@RequestBody List<BookInsertRequestList> requests) {
+    public List<BookCreatedResponseList> createBatch(@RequestBody List<BookInsertRequestList> requests) {
         return bookService.createList(requests);
     }
 
     @PutMapping("/{id}")
     public BookDetailResponse update(@PathVariable Long id,
-                                     @RequestBody BookUpdateRequest request
+                                     @RequestBody BookUpdatedRequest request
     ) {
         return bookService.update(id, request);
     }

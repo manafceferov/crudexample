@@ -5,7 +5,6 @@ import com.example.book.entity.Book;
 import com.example.book.mapper.BookMapper;
 import com.example.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,11 +32,11 @@ public class BookService {
         return bookMapper.toDetailResponse(bookRepository.findById(id).orElseThrow());
     }
 
-    public BookCreatedRequest create(BookInsertRequest request) {
+    public BookCreatedResponse create(BookInsertRequest request) {
         return bookMapper.toCreatedResponse(bookRepository.save(bookMapper.toEntity(request)));
     }
 
-    public List<BookCreatedRequestList> createList(List<BookInsertRequestList> requests) {
+    public List<BookCreatedResponseList> createList(List<BookInsertRequestList> requests) {
         List<Book> books = requests.stream()
                 .map(bookMapper::toEntity)
                 .toList();
@@ -51,7 +50,7 @@ public class BookService {
 
 
     public BookDetailResponse update(Long id,
-                                     BookUpdateRequest request
+                                     BookUpdatedRequest request
     ) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));

@@ -12,7 +12,7 @@ public interface BookMapper {
     Book toEntity(BookInsertRequestList request);
     BookDetailResponse toDetailResponse(Book book);
     BookListResponse toListResponse(Book book);
-    BookCreatedRequest toCreatedResponse(Book book);
-    BookCreatedRequestList toCreatedListResponse(Book book);
-    void updateEntity(BookUpdateRequest request, @MappingTarget Book book);
+    BookCreatedResponse toCreatedResponse(Book book);
+    BookCreatedResponseList toCreatedListResponse(Book book);
+    void updateEntity(BookUpdatedRequest request, @MappingTarget Book book);
 }
