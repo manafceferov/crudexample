@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.List;
 
 @Controller
@@ -20,9 +19,10 @@ public class BookController {
     }
 
     @GetMapping
-    public String getAll(@RequestParam(required = false) String title, Model model) {
-        model.addAttribute("books", bookService.getAll(title));
-        return "detail"; // Thymeleaf şablonuna qayıdır
+    public String getAll(@RequestParam(required = false) String searchText, Model model) {
+        model.addAttribute("books", bookService.getAll(searchText));
+        model.addAttribute("bookInsertRequest", new BookInsertRequest());
+        return "detail";
     }
 
     @GetMapping("/{id}")

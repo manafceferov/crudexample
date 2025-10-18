@@ -27,7 +27,7 @@ public class HomeController {
     @GetMapping("/detail")
     public String detail(Model model, @RequestParam(required = false) String title) {
         model.addAttribute("books", bookService.getAll(title));
-        model.addAttribute("bookInsertRequest", new BookInsertRequest("", "", 0.0));
+        model.addAttribute("bookInsertRequest", new BookInsertRequest());
         return "detail";
     }
 }

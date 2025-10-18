@@ -13,10 +13,7 @@
 <body>
 <div class="container my-5">
     <h1 class="text-center mb-4">Kitablar</h1>
-
-    <!-- Uğurlu Mesaj -->
     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}" role="alert"></div>
-
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Yeni Kitab Əlavə Et</h5>
@@ -42,7 +39,7 @@
             <h5 class="card-title">Kitab Axtar</h5>
             <form th:action="@{/books}" method="get">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="title" placeholder="Kitab adına görə axtar...">
+                    <input type="text" class="form-control" name="searchText" placeholder="Axtar...">
                     <button class="btn btn-primary" type="submit">Axtar</button>
                 </div>
             </form>

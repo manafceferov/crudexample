@@ -1,7 +1,7 @@
 package com.example.book.dto
 
 data class BookUpdatedRequest @JvmOverloads constructor(
-    var title: String?,
-    var author: String?,
-    var price: Double?
+    var title: String? = null,
+    var author: String? = null,
+    var price: Double? = null
 )
