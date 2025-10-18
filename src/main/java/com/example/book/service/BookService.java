@@ -21,7 +21,7 @@ public class BookService {
         this.bookMapper = bookMapper;
     }
 
-    public List<BookListResponse> getAll() {
+    public List<BookDetailResponseList> getAll() {
         return bookRepository.findAll()
                 .stream()
                 .map(bookMapper::toListResponse)

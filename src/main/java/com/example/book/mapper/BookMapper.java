@@ -11,7 +11,7 @@ public interface BookMapper {
     Book toEntity(BookInsertRequest request);
     Book toEntity(BookInsertRequestList request);
     BookDetailResponse toDetailResponse(Book book);
-    BookListResponse toListResponse(Book book);
+    BookDetailResponseList toListResponse(Book book);
     BookCreatedResponse toCreatedResponse(Book book);
     BookCreatedResponseList toCreatedListResponse(Book book);
     void updateEntity(BookUpdatedRequest request, @MappingTarget Book book);
