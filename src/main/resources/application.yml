@@ -1,20 +1,18 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5477/bookdb
+    driver-class-name: org.postgresql.Driver
+    username: bookuser
+    password: bookpass
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  jackson:
-    serialization:
-      indent_output: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:/db/changeLog-master.yaml
+jackson:
+  serialization:
+    indent-output: true
 server:
-  port: 2129
+  port: 2133

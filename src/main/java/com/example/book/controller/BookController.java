@@ -30,7 +30,7 @@ public class BookController {
         return bookService.create(request);
     }
 
-    @PostMapping
+    @PostMapping("/batch")
     public List<BookCreatedResponseList> createBatch(@RequestBody List<BookInsertRequestList> requests) {
         return bookService.createList(requests);
     }
