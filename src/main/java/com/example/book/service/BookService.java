@@ -21,9 +21,11 @@ public class BookService {
         this.bookMapper = bookMapper;
     }
 
-    public List<BookDetailResponseList> getAll() {
-        return bookRepository.findAll()
-                .stream()
+    public List<BookDetailResponseList> getAll(String title) {
+        List<Book> books = title == null || title.isEmpty()
+                ? bookRepository.findAll()
+                : bookRepository.findByTitleContainingIgnoreCase(title);
+        return books.stream()
                 .map(bookMapper::toListResponse)
                 .collect(Collectors.toList());
     }

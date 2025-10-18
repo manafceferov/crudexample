@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .book-card { transition: transform 0.2s; }
+        .book-card:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Kitablar</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Yeni Kitab Əlavə Et</h5>
+            <form th:action="@{/books}" method="post" th:object="${bookInsertRequest}">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Kitab Adı</label>
+                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="author" class="form-label">Müəllif</label>
+                    <input type="text" class="form-control" id="author" th:field="*{author}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Qiymət (AZN)</label>
+                    <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" required>
+                </div>
+                <button type="submit" class="btn btn-success">Əlavə Et</button>
+            </form>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Kitab Axtar</h5>
+            <form th:action="@{/books}" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="title" placeholder="Kitab adına görə axtar...">
+                    <button class="btn btn-primary" type="submit">Axtar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <h2 class="mb-3">Kitablar</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="book : ${books}">
+            <div class="card book-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.title}">Kitab Adı</h5>
+                    <p class="card-text" th:text="${book.author}">Müəllif</p>
+                    <p class="card-text" th:text="${book.price} + ' AZN'">Qiymət</p>
+                    <form th:action="@{/books/{id}(id=${book.id})}" method="post" th:method="delete" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -12,14 +12,15 @@ import jakarta.persistence.Table
 data class Book(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    @Column(name = "id", updatable = false, nullable = false)
+    open var id: Long? = null,
 
     @Column(name = "title", nullable = false)
-    var title: String,
+    open var title: String,
 
     @Column(name = "author", nullable = false)
-    var author: String,
+    open var author: String,
 
     @Column(name = "price", nullable = false)
-    var price: Double
+    open var price: Double
 )

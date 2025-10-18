@@ -16,8 +16,8 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookDetailResponseList> getAll() {
-        return bookService.getAll();
+    public List<BookDetailResponseList> getAll(@RequestParam(required = false) String title) {
+        return bookService.getAll(title);
     }
 
     @GetMapping("/{id}")
@@ -26,7 +26,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookCreatedResponse create(@RequestBody BookInsertRequest request) {
+    public BookCreatedResponse create(@ModelAttribute BookInsertRequest request) {
         return bookService.create(request);
     }
 
