@@ -2,10 +2,14 @@ package com.example.book.controller;
 
 import com.example.book.dto.*;
 import com.example.book.service.BookService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/books")
 public class BookController {
 
@@ -16,8 +20,9 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookDetailResponseList> getAll(@RequestParam(required = false) String title) {
-        return bookService.getAll(title);
+    public String getAll(@RequestParam(required = false) String title, Model model) {
+        model.addAttribute("books", bookService.getAll(title));
+        return "detail"; // Thymeleaf şablonuna qayıdır
     }
 
     @GetMapping("/{id}")
@@ -26,8 +31,10 @@ public class BookController {
     }
 
     @PostMapping
-    public BookCreatedResponse create(@ModelAttribute BookInsertRequest request) {
-        return bookService.create(request);
+    public String create(@ModelAttribute BookInsertRequest request, RedirectAttributes redirectAttributes) {
+        bookService.create(request);
+        redirectAttributes.addFlashAttribute("successMessage", "Kitab uğurla əlavə olundu!");
+        return "redirect:/home/detail"; // Cari səhifəyə qayıdır
     }
 
     @PostMapping("/batch")
@@ -43,7 +50,9 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Kitab uğurla silindi!");
+        return "redirect:/home/detail"; // Cari səhifəyə qayıdır
     }
 }
