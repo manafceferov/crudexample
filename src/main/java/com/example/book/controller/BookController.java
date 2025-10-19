@@ -49,10 +49,11 @@ public class BookController {
         return bookService.update(id, request);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Kitab silindi");
-        return "redirect:/home/detail";
+        return "redirect:/books";
     }
+
 }

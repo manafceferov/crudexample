@@ -6,9 +6,17 @@
     <link rel="icon" type="image/png" th:href="@{/files/bookgold.png}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .book-card { transition: transform 0.2s; }
-        .book-card:hover { transform: scale(1.05); }
-        .alert { margin-bottom: 20px; }
+        .book-card {
+            transition: transform 0.2s;
+        }
+
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -53,7 +61,7 @@
                     <h5 class="card-title" th:text="${book.title}">Kitab Adı</h5>
                     <p class="card-text" th:text="${book.author}">Müəllif</p>
                     <p class="card-text" th:text="${book.price} + ' AZN'">Qiymət</p>
-                    <form th:action="@{/books/{id}(id=${book.id})}" method="post" th:method="delete" class="d-inline">
+                    <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger">Sil</button>
                     </form>
                 </div>
