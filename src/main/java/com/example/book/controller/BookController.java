@@ -39,7 +39,7 @@ public class BookController {
 
     @PostMapping("/batch")
     public List<BookCreatedResponseList> createBatch(@RequestBody List<BookInsertRequestList> requests) {
-        return bookService.createList(requests);
+        return bookService.createBatch(requests);
     }
 
     @PostMapping("/update/{id}")

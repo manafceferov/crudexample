@@ -34,11 +34,11 @@ public class BookService {
         return bookMapper.toDetailResponse(bookRepository.findById(id).orElseThrow());
     }
 
-    public BookCreatedResponse create(BookInsertRequest request) {
-        return bookMapper.toCreatedResponse(bookRepository.save(bookMapper.toEntity(request)));
+    public void create(BookInsertRequest request) {
+        bookMapper.toCreatedResponse(bookRepository.save(bookMapper.toEntity(request)));
     }
 
-    public List<BookCreatedResponseList> createList(List<BookInsertRequestList> requests) {
+    public List<BookCreatedResponseList> createBatch(List<BookInsertRequestList> requests) {
         List<Book> books = requests.stream()
                 .map(bookMapper::toEntity)
                 .toList();
@@ -50,14 +50,14 @@ public class BookService {
                 .toList();
     }
 
-    public BookDetailResponse update(Long id,
-                                     BookUpdatedRequest request
+    public void update(Long id,
+                       BookUpdatedRequest request
     ) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new RuntimeException("Tapılmadı"));
 
         bookMapper.updateEntity(request, book);
-        return bookMapper.toDetailResponse(bookRepository.save(book));
+        bookMapper.toDetailResponse(bookRepository.save(book));
     }
 
     public void delete(Long id) {
