@@ -17,11 +17,50 @@
         .alert {
             margin-bottom: 20px;
         }
+
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #f4f4f4;
+        }
+
+        body.dark-mode .card {
+            background-color: #2a2a2a;
+            color: #f4f4f4;
+        }
+
+        body.dark-mode .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        body.dark-mode .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
+
+<div class="mode-toggle" id="modeToggle" onclick="toggleMode()">🌑</div>
+
 <div class="container my-5">
-    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}" role="alert"></div>
+    <div th:if="${successMessage}" class="alert alert-success" id="successMessage" th:text="${successMessage}"
+         role="alert"></div>
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Yeni Kitab Əlavə Et</h5>
@@ -42,6 +81,7 @@
             </form>
         </div>
     </div>
+
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Kitab Axtar</h5>
@@ -53,22 +93,78 @@
             </form>
         </div>
     </div>
+
     <h2 class="mb-3">Kitablar</h2>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" th:each="book : ${books}">
             <div class="card book-card h-100">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${book.title}">Kitab Adı</h5>
-                    <p class="card-text" th:text="${book.author}">Müəllif</p>
-                    <p class="card-text" th:text="${book.price} + ' AZN'">Qiymət</p>
-                    <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Sil</button>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h5 class="card-title" th:text="${book.title}">Kitab Adı</h5>
+                            <p class="card-text mb-0" th:text="${book.author}">Müəllif</p>
+                            <p class="card-text" th:text="${book.price} + ' AZN'">Qiymət</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-secondary btn-sm" type="button"
+                                    data-bs-toggle="collapse"
+                                    th:data-bs-target="'#editForm' + ${book.id}"
+                                    aria-expanded="false" aria-controls="editForm">
+                                ✏️
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapse" th:id="'editForm' + ${book.id}">
+                        <form th:action="@{/books/update/{id}(id=${book.id})}" method="post" class="mt-2">
+                            <input type="text" name="title" class="form-control form-control-sm mb-1"
+                                   th:value="${book.title}" placeholder="Kitab Adı" required>
+                            <input type="text" name="author" class="form-control form-control-sm mb-1"
+                                   th:value="${book.author}" placeholder="Müəllif" required>
+                            <input type="number" step="0.01" name="price" class="form-control form-control-sm mb-1"
+                                   th:value="${book.price}" placeholder="Qiymət" required>
+                            <button type="submit" class="btn btn-primary btn-sm">Yenilə</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="collapse"
+                                    th:data-bs-target="'#editForm' + ${book.id}">Bağla
+                            </button>
+                        </form>
+                    </div>
+                    <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" class="d-inline mt-2">
+                        <button type="submit" class="btn btn-danger btn-sm">Sil</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function checkModeOnLoad() {
+        const savedMode = localStorage.getItem("themeMode");
+        if (savedMode === "dark") {
+            document.body.classList.add("dark-mode");
+            document.getElementById("modeToggle").textContent = "☀️";
+        }
+    }
+
+    function toggleMode() {
+        document.body.classList.toggle("dark-mode");
+        const isDark = document.body.classList.contains("dark-mode");
+        document.getElementById("modeToggle").textContent = isDark ? "☀️" : "🌑";
+        localStorage.setItem("themeMode", isDark ? "dark" : "light");
+    }
+
+    checkModeOnLoad();
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const msg = document.getElementById('successMessage');
+        if (msg) {
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 2000);
+        }
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -42,11 +42,17 @@ public class BookController {
         return bookService.createList(requests);
     }
 
-    @PutMapping("/{id}")
-    public BookDetailResponse update(@PathVariable Long id,
-                                     @RequestBody BookUpdatedRequest request
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable Long id,
+                         @RequestParam String title,
+                         @RequestParam String author,
+                         @RequestParam Double price,
+                         RedirectAttributes redirectAttributes
     ) {
-        return bookService.update(id, request);
+        BookUpdatedRequest request = new BookUpdatedRequest(title, author, price);
+        bookService.update(id, request);
+        redirectAttributes.addFlashAttribute("successMessage", "Kitab yeniləndi");
+        return "redirect:/books";
     }
 
     @PostMapping("/delete/{id}")
