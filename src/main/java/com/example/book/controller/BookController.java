@@ -33,8 +33,8 @@ public class BookController {
     @PostMapping
     public String create(@ModelAttribute BookInsertRequest request, RedirectAttributes redirectAttributes) {
         bookService.create(request);
-        redirectAttributes.addFlashAttribute("successMessage", "Kitab uğurla əlavə olundu!");
-        return "redirect:/home/detail"; // Cari səhifəyə qayıdır
+        redirectAttributes.addFlashAttribute("successMessage", "Kitab əlavə olundu");
+        return "redirect:/home/detail";
     }
 
     @PostMapping("/batch")
@@ -52,7 +52,7 @@ public class BookController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Kitab uğurla silindi!");
-        return "redirect:/home/detail"; // Cari səhifəyə qayıdır
+        redirectAttributes.addFlashAttribute("successMessage", "Kitab silindi");
+        return "redirect:/home/detail";
     }
 }
