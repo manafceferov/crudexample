@@ -67,5 +67,4 @@ public class BookController {
         redirectAttributes.addFlashAttribute("successMessage", "Kitab silindi");
         return "redirect:/books";
     }
-
 }

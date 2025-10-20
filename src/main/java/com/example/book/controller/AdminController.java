@@ -19,7 +19,9 @@ public class AdminController {
     }
 
     @GetMapping
-    public String detail(Model model, @RequestParam(required = false) String title) {
+    public String detail(Model model,
+                         @RequestParam(required = false) String title
+    ) {
         model.addAttribute("books", bookService.getAll(title));
         model.addAttribute("bookInsertRequest", new BookInsertRequest());
         return "detail";
