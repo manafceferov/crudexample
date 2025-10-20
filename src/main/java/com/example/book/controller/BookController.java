@@ -19,7 +19,9 @@ public class BookController {
     }
 
     @GetMapping
-    public String getAll(@RequestParam(required = false) String searchText, Model model) {
+    public String getAll(@RequestParam(required = false) String searchText,
+                         Model model
+    ) {
         model.addAttribute("books", bookService.getAll(searchText));
         model.addAttribute("bookInsertRequest", new BookInsertRequest());
         return "detail";
@@ -31,7 +33,9 @@ public class BookController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute BookInsertRequest request, RedirectAttributes redirectAttributes) {
+    public String create(@ModelAttribute BookInsertRequest request,
+                         RedirectAttributes redirectAttributes
+    ) {
         bookService.create(request);
         redirectAttributes.addFlashAttribute("successMessage", "Kitab əlavə olundu");
         return "redirect:/home/detail";
@@ -56,7 +60,9 @@ public class BookController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long id,
+                         RedirectAttributes redirectAttributes
+    ) {
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Kitab silindi");
         return "redirect:/books";
