@@ -34,12 +34,14 @@ public class BookController {
 
     @PostMapping
     public String create(@ModelAttribute BookInsertRequest request,
-                         RedirectAttributes redirectAttributes
-    ) {
+                         Model model) {
         bookService.create(request);
-        redirectAttributes.addFlashAttribute("successMessage", "Kitab əlavə olundu");
-        return "redirect:/home/detail";
+        model.addAttribute("successMessage", "Əlavə olundu");
+        model.addAttribute("books", bookService.getAll(null));
+        model.addAttribute("bookInsertRequest", new BookInsertRequest());
+        return "detail";
     }
+
 
     @PostMapping("/batch")
     public List<BookCreatedResponseList> createBatch(@RequestBody List<BookInsertRequestList> requests) {
@@ -55,7 +57,7 @@ public class BookController {
     ) {
         BookUpdatedRequest request = new BookUpdatedRequest(title, author, price);
         bookService.update(id, request);
-        redirectAttributes.addFlashAttribute("successMessage", "Kitab yeniləndi");
+        redirectAttributes.addFlashAttribute("successMessage", "Yeniləndi");
         return "redirect:/books";
     }
 
@@ -64,7 +66,7 @@ public class BookController {
                          RedirectAttributes redirectAttributes
     ) {
         bookService.delete(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Kitab silindi");
+        redirectAttributes.addFlashAttribute("successMessage", "Silindi");
         return "redirect:/books";
     }
 }

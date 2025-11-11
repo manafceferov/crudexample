@@ -24,6 +24,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: price
-                  type: NUMERIC(10,2)
+                  type: DOUBLE PRECISION
                   constraints:
                     nullable: false
+

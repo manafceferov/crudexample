@@ -7,7 +7,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.10'
 }
 
-group = 'com.example'
+group = 'com.jafarov.quiz'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -19,23 +19,24 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.postgresql:postgresql:42.7.3'
+    implementation 'org.liquibase:liquibase-core'
+
     implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation("org.mapstruct:mapstruct:1.5.5.Final")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation "org.mapstruct:mapstruct:1.5.5.Final"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    kotlinOptions.jvmTarget = "17"
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += [
-            "-Amapstruct.defaultComponentModel=spring"
-    ]
+    options.compilerArgs += ["-Amapstruct.defaultComponentModel=spring"]
 }

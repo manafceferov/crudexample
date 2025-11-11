@@ -1,18 +1,24 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5477/bookdb
+    url: jdbc:postgresql://localhost:5433/bookdb
+    username: quizuser
+    password: quizpassword
     driver-class-name: org.postgresql.Driver
-    username: bookuser
-    password: bookpass
+
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   liquibase:
-    change-log: classpath:/db/changeLog-master.yaml
+    change-log: classpath:db/db.changelog-master.yml
+
+server:
+  port: 3333
+
 jackson:
   serialization:
     indent-output: true
-server:
-  port: 2133
