@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 @Controller
@@ -34,14 +35,14 @@ public class BookController {
 
     @PostMapping
     public String create(@ModelAttribute BookInsertRequest request,
-                         Model model) {
+                         Model model
+    ) {
         bookService.create(request);
         model.addAttribute("successMessage", "Əlavə olundu");
         model.addAttribute("books", bookService.getAll(null));
         model.addAttribute("bookInsertRequest", new BookInsertRequest());
         return "detail";
     }
-
 
     @PostMapping("/batch")
     public List<BookCreatedResponseList> createBatch(@RequestBody List<BookInsertRequestList> requests) {

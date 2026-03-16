@@ -1,37 +1,146 @@
 <!DOCTYPE html>
-<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<html lang="az" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Kitab Siyahısı</title>
+    <title>Kitab Mağazası</title>
     <link rel="icon" type="image/png" th:href="@{/files/smilebook.png}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .book-card { transition: transform 0.2s; }
-        .book-card:hover { transform: scale(1.05); }
+        .book-card {
+            transition: transform 0.2s;
+        }
 
-        body.dark-mode { background-color: #1e1e1e; color: #f4f4f4; }
-        body.dark-mode .card { background-color: #2a2a2a; color: #f4f4f4; }
-        body.dark-mode .btn-primary { background-color: #0d6efd; border-color: #0d6efd; }
-        body.dark-mode .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #f4f4f4;
+        }
+
+        body.dark-mode .card {
+            background-color: #2a2a2a;
+            color: #f4f4f4;
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        body.dark-mode .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #2a2a2a !important;
+        }
+
+        body:not(.dark-mode) .navbar-brand {
+            color: #212529 !important;
+        }
+
+        body.dark-mode .navbar-brand {
+            color: #ffffff !important;
+        }
 
         .mode-toggle {
-            position: fixed; top: 10px; right: 20px;
-            font-size: 24px; cursor: pointer;
-            user-select: none; z-index: 1000;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 15px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .custom-toast {
+            min-width: 250px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
-<div class="mode-toggle" id="modeToggle" onclick="toggleMode()">🌑</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/home}">📚 Kitab Mağazası</a>
+
+        <div class="d-flex align-items-center ms-auto">
+            <div class="mode-toggle" id="modeToggle" onclick="toggleMode()">🌑</div>
+
+            <div sec:authorize="isAuthenticated()" class="d-flex align-items-center">
+                <span class="me-3" th:if="${currentUser != null}">
+                    Salam, <strong th:text="${currentUser.fullName}">İstifadəçi</strong>
+                </span>
+
+                <a th:href="@{/cart}" class="btn btn-outline-success me-2 position-relative">
+                    🛒 Səbət
+                    <span th:if="${cartItemCount > 0}"
+                          class="cart-badge"
+                          id="cartBadge"
+                          th:text="${cartItemCount}"></span>
+                </a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger">Çıxış</button>
+                </form>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/auth/login}" class="btn btn-outline-primary me-2">Giriş</a>
+                <a th:href="@{/auth/register}" class="btn btn-primary">Qeydiyyat</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <div class="container my-5">
     <h1 class="text-center mb-4">Kitablar</h1>
+
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Kitab Axtar</h5>
             <form th:action="@{/home}" method="get">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="searchText" placeholder="Axtar..." th:value="${searchText}">
+                    <input type="text" class="form-control" name="searchText"
+                           placeholder="Kitab adı və ya müəllif..." th:value="${searchText}">
                     <button class="btn btn-primary" type="submit">Axtar</button>
                 </div>
             </form>
@@ -43,9 +152,25 @@
             <div class="card book-card h-100">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${book.title}">Kitab Adı</h5>
-                    <p class="card-text" th:text="${book.author}">Müəllif</p>
-                    <p class="card-text" th:text="${book.price} + ' AZN'">Qiymət</p>
-                    <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-primary">Ətraflı</a>
+                    <p class="card-text text-muted" th:text="${book.author}">Müəllif</p>
+                    <p class="card-text fw-bold text-success" th:text="${book.price} + ' AZN'">Qiymət</p>
+
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/home/{id}(id=${book.id})}" class="btn btn-primary btn-sm">Ətraflı</a>
+
+                        <button sec:authorize="isAuthenticated()"
+                                th:attr="data-book-id=${book.id}"
+                                onclick="addToCart(this)"
+                                class="btn btn-success btn-sm">
+                            🛒 Səbətə at
+                        </button>
+
+                        <a sec:authorize="!isAuthenticated()"
+                           th:href="@{/auth/login}"
+                           class="btn btn-outline-success btn-sm">
+                            🔒 Səbətə at
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,13 +185,70 @@
             document.getElementById("modeToggle").textContent = "☀️";
         }
     }
+
     function toggleMode() {
         document.body.classList.toggle("dark-mode");
         const isDark = document.body.classList.contains("dark-mode");
         document.getElementById("modeToggle").textContent = isDark ? "☀️" : "🌑";
         localStorage.setItem("themeMode", isDark ? "dark" : "light");
     }
+
     checkModeOnLoad();
+
+    function addToCart(button) {
+        const bookId = button.getAttribute('data-book-id');
+
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `bookId=${bookId}&quantity=1`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message);
+                    updateCartBadge(data.cartCount);
+                } else {
+                    showToast(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Xəta baş verdi!', 'error');
+            });
+    }
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.style.backgroundColor = type === 'success' ? '#28a745' : '#dc3545';
+        toast.innerHTML = `<strong>✓</strong> ${message}`;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideIn 0.3s ease-out reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 1000);
+    }
+
+    function updateCartBadge(count) {
+        let badge = document.getElementById('cartBadge');
+        if (count > 0) {
+            if (!badge) {
+                const cartButton = document.querySelector('a[href="/cart"]');
+                badge = document.createElement('span');
+                badge.id = 'cartBadge';
+                badge.className = 'cart-badge';
+                cartButton.appendChild(badge);
+            }
+            badge.textContent = count;
+        } else if (badge) {
+            badge.remove();
+        }
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

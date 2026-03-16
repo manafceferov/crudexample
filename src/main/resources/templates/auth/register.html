@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="az" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Qeydiyyat</title>
+    <link rel="icon" type="image/png" th:href="@{/files/smilebook.png}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .register-card {
+            max-width: 450px;
+            margin: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card register-card">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4">📝 Qeydiyyat</h2>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form th:action="@{/auth/register}" method="post">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Ad Soyad</label>
+                    <input type="text" class="form-control" id="fullName"
+                           name="fullName" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email"
+                           name="email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Şifrə</label>
+                    <input type="password" class="form-control" id="password"
+                           name="password" required minlength="6">
+                    <small class="text-muted">Minimum 6 simvol</small>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 mb-3">
+                    Qeydiyyatdan keç
+                </button>
+            </form>
+
+            <div class="text-center">
+                <p class="mb-0">Artıq hesabınız var?
+                    <a th:href="@{/auth/login}">Daxil olun</a>
+                </p>
+                <a th:href="@{/home}" class="text-muted">← Ana səhifəyə qayıt</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
